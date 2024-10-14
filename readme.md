@@ -21,8 +21,9 @@ venv\Scripts\activate  # On Windows
 pip install -r requirements.txt
 
 # Configure Environment Variable
+cp .env.example .env #on mac
 
-cp .env.example .env
+copy .env.example .env #on window
 
 # Run the project
 
