@@ -1,0 +1,5 @@
+python-dotenv==1.0.0  # For loading environment variables from .env files
+langchain==0.0.200  # Update this to the latest version of LangChain you are using
+langchain-community==0.0.200  # Update this to the latest version of LangChain community modules
+langchain-core==0.0.200  # Update this to the latest version of LangChain core modules
+langchain-openai==0.0.200  # Update this to the latest version of LangChain OpenAI modules
