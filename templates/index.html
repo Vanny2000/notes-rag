@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Query</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* HTML: <div class="loader"></div> */
+      #loading {
+        display: none; /* Initially hidden */
+        width: 80px;
+        height: 75px;
+        --c:no-repeat radial-gradient(farthest-side, #f7b261 85%,#b97850,#0000);
+        --b:no-repeat radial-gradient(farthest-side, #734b46 94%,#0000);
+        --s:8px 8px,8px 8px,8px 8px,40px 40px;
+        --e:0 0, 0 0,0 0, 0 0;
+        background:
+          var(--b) 55% 47%,
+          var(--b) 60% 66%,
+          var(--b) 37% 43%,
+          var(--c) 50% 50%,
+          var(--b) 15px 4px,
+          var(--b) 4px  14px,
+          var(--b) 27px 18px,
+          var(--c) 0    0,
+          var(--b) calc(100% - 15px)  4px,
+          var(--b) calc(100% - 4px)  14px,
+          var(--b) calc(100% - 27px) 18px,
+          var(--c) 100% 0/40px 40px,
+          var(--b) 24px 47px,
+          var(--b) 50%  43px,
+          var(--b) 60%  58px,
+          var(--c) 50%  100%;
+        animation: l5 3s infinite;
+      }
+      @keyframes l5 {
+        0%    ,20% {background-size: var(--s),var(--s),var(--s),var(--s)}
+        20.01%,40% {background-size: var(--e),var(--s),var(--s),var(--s)}
+        40.01%,60% {background-size: var(--e),var(--e),var(--s),var(--s)}
+        60.01%,80% {background-size: var(--e),var(--e),var(--e),var(--s)}
+        80.01%,100%{background-size: var(--e),var(--e),var(--e),var(--e)}
+      }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-5">Ask Questions About Your Notes 😎</h1>
+        <form id="question-form" class="mb-5">
+            <label for="question" class="block text-lg font-medium text-gray-700">Question:</label>
+            <input type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500" id="question" name="question" required>
+            <button type="submit" class="mt-4 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" id="submit-btn">Teal</button>
+            
+        </form>
+        <div class="loader" id="loading"></div> 
+        <h2 class="text-xl font-semibold mt-4 text-center">Answer: </h2>
+        <div class="flex justify-center bg-white rounded-lg p-4 min-h-80">
+          <p id="answer" class="mt-2 text-gray-800"></p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            function typeAnswer(answer) {
+                const answerElement = $('#answer');
+                answerElement.text(''); // Clear previous answer
+                let index = 0;
+
+                // Function to type out the answer
+                function typeNextCharacter() {
+                    if (index < answer.length) {
+                        answerElement.append(answer[index]);
+                        index++;
+                        setTimeout(typeNextCharacter, 15); // Adjust speed here (50ms per character)
+                    }
+                }
+
+                typeNextCharacter();
+            }
+
+            $('#question-form').on('submit', function(e) {
+                e.preventDefault(); // Prevent the form from submitting normally
+                const question = $('#question').val(); // Get the question input
+
+                $("#submit-btn").hide();
+                $("#loading").show();
+
+                // Show loading indicator
+                $('#loading').show();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/ask',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ question: question }),
+                    success: function(response) {
+                        // $('#answer').text(response.answer); // Display the answer
+                        typeAnswer(response.answer);
+                    },
+                    error: function() {
+                        $('#answer').text("An error occurred while processing your request.");
+                    },
+                    complete: function() {
+                        // Hide loading indicator after the request is complete
+                        $('#loading').hide();
+                        $("#submit-btn").show();
+                        // Clear the input field
+                        $('#question').val("");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
