@@ -2,30 +2,42 @@
 
 This project implements Retrieval-Augmented Generation (RAG) for efficient note-taking and knowledge retrieval using LangChain and OpenAI's chat models.
 
-## Getting Started
+# Getting Started
 
 Follow these steps to set up and run the project:
-# Create virtual environment
 
+## Create virtual environment
+
+```python
 python -m venv venv
+```
 
-# Activate virtual environment
+## Activate virtual environment
 
+```
 source venv/bin/activate  # On macOS/Linux
-# OR
 
 venv\Scripts\activate  # On Windows
+```
 
-# Install Dependencies
+## Install Dependencies
+
+```python
 
 pip install -r requirements.txt
+```
 
-# Configure Environment Variable
+## Configure Environment Variable
+
+```
 cp .env.example .env #on mac
 
 copy .env.example .env #on window
+```
 
-# Run the project
+## Run the project
 
-python main.py 
+```python
 
+python main.py
+```
